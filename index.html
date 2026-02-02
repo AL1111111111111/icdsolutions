@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Access Redirect</title>
+</head>
+<body>
+    <script>
+        // Get parameters from the URL (?s=101&c=5502&u=Nissim)
+        const params = new URLSearchParams(window.location.search);
+        const s = params.get('s'); // Site Code
+        const c = params.get('c'); // Card ID
+        const u = params.get('u'); // User Name
+
+        if (s && c) {
+            // Construct your app's custom link
+            const appLink = `accessapp://credentials?site_code=${s}&card_id=${c}&user=${u || 'User'}`;
+            
+            // Try to open the app
+            window.location.href = appLink;
+
+            // If the app doesn't open in 1 second, show a manual button
+            setTimeout(() => {
+                document.body.innerHTML = `
+                    <div style="text-align:center; padding-top:50px; font-family:sans-serif;">
+                        <h2>Opening Access App...</h2>
+                        <p>If the app didn't open automatically, click below:</p>
+                        <a href="${appLink}" style="padding:15px 25px; background:#007bff; color:white; text-decoration:none; border-radius:5px; display:inline-block;">Open App</a>
+                    </div>`;
+            }, 1000);
+        } else {
+            document.body.innerHTML = "<h2>Invalid Link: Missing Site or Card ID</h2>";
+        }
+    </script>
+</body>
+</html>
