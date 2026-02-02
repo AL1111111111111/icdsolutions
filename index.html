@@ -7,13 +7,14 @@
     <script>
         // Get parameters from the URL (?s=101&c=5502&u=Nissim)
         const params = new URLSearchParams(window.location.search);
+        const w = params.get('w'); // Site Code
         const s = params.get('s'); // Site Code
         const c = params.get('c'); // Card ID
         const u = params.get('u'); // User Name
 
         if (s && c) {
             // Construct your app's custom link
-            const appLink = `accessapp://credentials?site_code=${s}&card_id=${c}&user=${u || 'User'}`;
+            const appLink = `accessapp://credentials?wiegand=${w}&site_code=${s}&card_id=${c}&user=${u || 'User'}`;
             
             // Try to open the app
             window.location.href = appLink;
