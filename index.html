@@ -1,36 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Access Secure Redirect</title>
+    <title>ICD Solutions Access</title>
 </head>
 <body>
     <script>
-        // 1. Get the encrypted string from your website URL 
-        // Example: yoursite.com/index.html?data=USDDNkKvLC2Yax...
         const params = new URLSearchParams(window.location.search);
-        const encryptedToken = params.get('data');
+        const encryptedData = params.get('data');
 
-        if (encryptedToken) {
-            // 2. Construct the deep link using the exact encrypted string
-            const appLink = `accessapp://unlock?data=${encodeURIComponent(encryptedToken)}`;
+        if (encryptedData) {
+            // Forward the encrypted token to the app
+            const appLink = `accessapp://unlock?data=${encodeURIComponent(encryptedData)}`;
             
-            // 3. Redirect to the app
             window.location.href = appLink;
 
-            // 4. Fallback UI
-            setTimeout(() => {
-                document.body.innerHTML = `
-                    <div style="text-align:center; padding-top:50px; font-family:sans-serif;">
-                        <h2>🔐 Opening Secure Access App...</h2>
-                        <p>Transferring encrypted credentials.</p>
-                        <br>
-                        <a href="${appLink}" style="padding:15px 25px; background:#007bff; color:white; text-decoration:none; border-radius:5px; display:inline-block;">
-                            Open App Manually
-                        </a>
-                    </div>`;
-            }, 1000);
+            // Visual feedback
+            document.body.innerHTML = `
+                <div style="text-align:center; padding-top:50px; font-family:sans-serif;">
+                    <h2>Connecting to ICD Access...</h2>
+                    <p>Encrypted Data Found. Opening App.</p>
+                    <a href="${appLink}" style="padding:10px 20px; background:#000; color:#fff; text-decoration:none;">Open Manually</a>
+                </div>`;
         } else {
-            document.body.innerHTML = "<h2 style='text-align:center; color:red;'>Error: No encrypted data found in link.</h2>";
+            document.body.innerHTML = "<h2>Invalid Link: Missing Data Parameter</h2>";
         }
     </script>
 </body>
