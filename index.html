@@ -10,7 +10,8 @@
 
         if (encryptedData) {
             // Forward the encrypted token to the app
-            const appLink = `accessapp://unlock?data=${encodeURIComponent(encryptedData)}`;
+            const appLink = `accessapp://credentials?data=${encodeURIComponent(encryptedData)}`;
+            
             
             window.location.href = appLink;
 
