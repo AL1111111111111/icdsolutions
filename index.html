@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Access Redirect</title>
+    <title>Access Secure Redirect</title>
 </head>
 <body>
     <script>
+        // 1. Get the encrypted string from your website URL 
+        // Example: yoursite.com/index.html?data=USDDNkKvLC2Yax...
         const params = new URLSearchParams(window.location.search);
-        const w = params.get('w') || '26'; // Default to 26 if missing
-        const s = params.get('s');
-        const c = params.get('c');
-        const u = params.get('u') || 'User';
-        
-        if (s && c) {
-            // encodeURIComponent ensures spaces/special chars don't break the link
-            const appLink = `accessapp://credentials?wiegand=${encodeURIComponent(w)}&site_code=${encodeURIComponent(s)}&card_id=${encodeURIComponent(c)}&user=${encodeURIComponent(u)}`;
+        const encryptedToken = params.get('data');
+
+        if (encryptedToken) {
+            // 2. Construct the deep link using the exact encrypted string
+            const appLink = `accessapp://unlock?data=${encodeURIComponent(encryptedToken)}`;
             
+            // 3. Redirect to the app
             window.location.href = appLink;
-        
+
+            // 4. Fallback UI
             setTimeout(() => {
                 document.body.innerHTML = `
                     <div style="text-align:center; padding-top:50px; font-family:sans-serif;">
-                        <h2>Opening Access App...</h2>
-                        <p>Wiegand: ${w} | Site: ${s} | Card: ${c}</p>
-                        <a href="${appLink}" style="padding:15px 25px; background:#007bff; color:white; text-decoration:none; border-radius:5px; display:inline-block;">Open App Manually</a>
+                        <h2>🔐 Opening Secure Access App...</h2>
+                        <p>Transferring encrypted credentials.</p>
+                        <br>
+                        <a href="${appLink}" style="padding:15px 25px; background:#007bff; color:white; text-decoration:none; border-radius:5px; display:inline-block;">
+                            Open App Manually
+                        </a>
                     </div>`;
             }, 1000);
         } else {
-            document.body.innerHTML = "<h2>Error: Site Code (s) and Card ID (c) are required.</h2>";
+            document.body.innerHTML = "<h2 style='text-align:center; color:red;'>Error: No encrypted data found in link.</h2>";
         }
     </script>
 </body>
